@@ -73,12 +73,6 @@ server.listen(process.env.port || process.env.PORT || 3978, () => {
     console.log('\nTo test your bot in Teams, sideload the app manifest.json within Teams Apps.');
 });
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ConversationState extends DefaultConversationState {
-    lightsOn: boolean;
-}
-type ApplicationTurnState = TurnState<ConversationState>;
-
 if (!process.env.OPENAI_KEY && !process.env.AZURE_OPENAI_KEY) {
     throw new Error('Missing environment variables - please check that OPENAI_KEY or AZURE_OPENAI_KEY is set.');
 }
@@ -110,6 +104,11 @@ const planner = new ActionPlanner({
 });
 
 // Define storage and application
+interface ConversationState extends DefaultConversationState {
+    lightsOn: boolean;
+}
+type ApplicationTurnState = TurnState<ConversationState>;
+
 const storage = new MemoryStorage();
 const app = new Application<ApplicationTurnState>({
     storage,
